@@ -1,561 +1,690 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="light">
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MiMarca — Diseño y desarrollo web</title>
-  <meta name="description" content="Creamos sitios web rápidos, modernos y adaptados a móviles.">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lógica Matemática — Resumen y Juego</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#070c18;
+    --card:#111a2f;
+    --border:#22304f;
+    --accent:#6c8cff;
+    --accent2:#22d3ee;
+    --ok:#22c55e;
+    --bad:#ef4444;
+    --text:#e8edff;
+    --muted:#93a2c4;
+    --radius:16px;
+  }
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
+    color:var(--text);
+    background:
+      radial-gradient(900px 500px at 8% -5%, #1b2a55 0%, transparent 60%),
+      radial-gradient(800px 450px at 105% 0%, #0d3b45 0%, transparent 55%),
+      var(--bg);
+    min-height:100vh;
+    line-height:1.65;
+    padding-bottom:70px;
+  }
 
-  <!-- ==================== CSS ==================== -->
-  <style>
-    /* ---------- VARIABLES Y RESET ---------- */
-    :root {
-      --bg: #ffffff;
-      --bg-alt: #f7f7fb;
-      --text: #1a1a2e;
-      --text-muted: #555;
-      --accent: #4f46e5;
-      --accent-hover: #4338ca;
-      --border: #e0e0e8;
-      --card-bg: #ffffff;
-      --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-      --radius: 12px;
-      --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    }
+  /* ---------- HEADER ---------- */
+  header{padding:70px 20px 45px;text-align:center;position:relative;overflow:hidden}
+  header h1{
+    font-size:clamp(1.9rem,5vw,3.2rem);
+    font-weight:800;
+    letter-spacing:-.5px;
+    background:linear-gradient(90deg,#6c8cff,#22d3ee,#a78bfa);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  header p{color:var(--muted);max-width:680px;margin:16px auto 0;font-size:1.05rem}
+  .etiqueta{
+    display:inline-block;margin-bottom:18px;padding:6px 16px;border-radius:999px;
+    font-size:.78rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;
+    color:#a9bcff;background:rgba(108,140,255,.12);border:1px solid rgba(108,140,255,.35);
+  }
 
-    [data-theme="dark"] {
-      --bg: #0f0f1a;
-      --bg-alt: #1a1a2e;
-      --text: #e8e8f0;
-      --text-muted: #a0a0b8;
-      --accent: #818cf8;
-      --accent-hover: #a5b4fc;
-      --border: #2a2a40;
-      --card-bg: #1e1e32;
-      --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    }
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(12px);
+    background:rgba(7,12,24,.78);
+    border-bottom:1px solid var(--border);
+    display:flex;gap:8px;justify-content:center;flex-wrap:wrap;
+    padding:12px 16px;
+  }
+  nav a{
+    color:var(--muted);text-decoration:none;padding:8px 18px;border-radius:999px;
+    font-size:.9rem;font-weight:600;transition:.2s;
+  }
+  nav a:hover{color:#fff;background:rgba(108,140,255,.18)}
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+  /* ---------- LAYOUT ---------- */
+  main{max-width:1200px;margin:0 auto;padding:0 20px}
+  .seccion{margin-top:72px;scroll-margin-top:80px}
+  .seccion > h2{font-size:clamp(1.4rem,3vw,1.85rem);margin-bottom:6px}
+  .seccion .subtitulo{color:var(--muted);margin-bottom:30px;font-size:.98rem}
 
-    body {
-      font-family: var(--font);
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      transition: background 0.3s, color 0.3s;
-    }
+  /* ---------- CARDS ---------- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px}
+  .card{
+    position:relative;overflow:hidden;
+    background:linear-gradient(160deg,var(--card),#0d1526);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:22px;
+    transition:transform .25s, border-color .25s, box-shadow .25s;
+  }
+  .card::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(120deg,rgba(108,140,255,.14),transparent 45%);
+    opacity:0;transition:.3s;
+  }
+  .card:hover{transform:translateY(-5px);border-color:rgba(108,140,255,.55);box-shadow:0 18px 40px -18px rgba(108,140,255,.6)}
+  .card:hover::before{opacity:1}
+  .card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .badge{
+    font-size:.72rem;font-weight:800;letter-spacing:.6px;padding:4px 12px;border-radius:999px;
+    background:rgba(108,140,255,.16);color:#a9bcff;border:1px solid rgba(108,140,255,.35);
+  }
+  .icono{font-size:1.5rem;line-height:1}
+  .card h3{font-size:1.06rem;line-height:1.35;margin-bottom:10px}
+  .card p{color:var(--muted);font-size:.9rem;margin-bottom:14px}
+  .card ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+  .card li{font-size:.86rem;color:#c3cfe8;padding-left:18px;position:relative}
+  .card li::before{
+    content:"";position:absolute;left:0;top:.55em;width:7px;height:7px;border-radius:50%;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+  }
 
-    .container { width: min(1100px, 90%); margin: 0 auto; }
+  /* ---------- QUIZ ---------- */
+  .quiz{
+    max-width:820px;margin:0 auto;padding:30px;
+    background:linear-gradient(160deg,#111a2f,#0b1322);
+    border:1px solid var(--border);border-radius:22px;
+    box-shadow:0 30px 60px -30px rgba(0,0,0,.9);
+  }
+  .oculto{display:none}
+  .quiz-top{display:flex;justify-content:space-between;font-size:.85rem;color:var(--muted);font-weight:600;margin-bottom:10px}
+  .barra{height:8px;background:#1c2947;border-radius:999px;overflow:hidden;margin-bottom:26px}
+  #barra-fill{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .35s ease}
+  #quiz-pregunta{font-size:1.22rem;line-height:1.45;margin-bottom:20px}
+  .opciones{display:flex;flex-direction:column;gap:12px}
+  .opcion{
+    font-family:inherit;font-size:.95rem;text-align:left;color:var(--text);
+    padding:14px 18px;border-radius:12px;cursor:pointer;
+    background:#16213a;border:1px solid var(--border);
+    transition:.2s;
+  }
+  .opcion:hover:not(:disabled){border-color:rgba(108,140,255,.6);background:#1b2947;transform:translateX(4px)}
+  .opcion:disabled{cursor:default;opacity:.9}
+  .opcion.correcta{border-color:var(--ok);background:rgba(34,197,94,.16);color:#b8f5cd}
+  .opcion.incorrecta{border-color:var(--bad);background:rgba(239,68,68,.16);color:#ffc9c9}
+  .feedback{
+    margin-top:18px;padding:14px 16px;border-radius:12px;font-size:.92rem;
+    background:#16213a;border-left:4px solid var(--accent);
+  }
+  .feedback.ok{border-left-color:var(--ok)}
+  .feedback.no{border-left-color:var(--bad)}
+  .btn{
+    font-family:inherit;font-size:.95rem;font-weight:800;cursor:pointer;
+    margin-top:22px;padding:13px 32px;border:none;border-radius:999px;
+    color:#06101f;background:linear-gradient(90deg,#6c8cff,#22d3ee);
+    transition:.2s;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 14px 30px -12px rgba(34,211,238,.8)}
+  .centrado{text-align:center}
+  .puntaje-grande{
+    font-size:3.2rem;font-weight:800;line-height:1.1;
+    background:linear-gradient(90deg,#6c8cff,#22d3ee);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .quiz-panel > p{color:var(--muted);margin-top:8px}
 
-    /* ---------- HEADER ---------- */
-    .header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: var(--bg);
-      border-bottom: 1px solid var(--border);
-      transition: background 0.3s, border-color 0.3s;
-    }
+  footer{text-align:center;color:var(--muted);font-size:.85rem;margin-top:80px;padding:0 20px}
 
-    .nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 70px;
-    }
-
-    .logo {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: var(--text);
-      text-decoration: none;
-      letter-spacing: -0.5px;
-    }
-    .logo span { color: var(--accent); }
-
-    .nav-menu {
-      display: flex;
-      align-items: center;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-link {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-    .nav-link:hover, .nav-link.active { color: var(--accent); }
-
-    .theme-toggle {
-      background: none;
-      border: 1px solid var(--border);
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      font-size: 1.1rem;
-      cursor: pointer;
-      transition: border-color 0.2s, transform 0.2s;
-    }
-    .theme-toggle:hover { border-color: var(--accent); transform: scale(1.05); }
-
-    .nav-toggle {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 5px;
-    }
-    .nav-toggle span {
-      width: 25px;
-      height: 3px;
-      background: var(--text);
-      border-radius: 2px;
-      transition: transform 0.3s, opacity 0.3s;
-    }
-    .nav-toggle.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-    .nav-toggle.active span:nth-child(2) { opacity: 0; }
-    .nav-toggle.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
-
-    /* ---------- HERO ---------- */
-    .hero { padding: 6rem 0; text-align: center; }
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      line-height: 1.2;
-      letter-spacing: -1px;
-      margin-bottom: 1.5rem;
-    }
-    .hero h1 span { color: var(--accent); }
-    .hero p {
-      font-size: 1.15rem;
-      color: var(--text-muted);
-      max-width: 600px;
-      margin: 0 auto 2.5rem;
-    }
-    .hero-actions {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    /* ---------- BOTONES ---------- */
-    .btn {
-      display: inline-block;
-      padding: 0.8rem 1.8rem;
-      border-radius: 8px;
-      font-weight: 600;
-      text-decoration: none;
-      font-size: 1rem;
-      cursor: pointer;
-      border: 2px solid transparent;
-      transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
-    }
-    .btn:hover { transform: translateY(-2px); }
-
-    .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
-    .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
-
-    .btn-outline { background: transparent; color: var(--text); border-color: var(--border); }
-    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
-
-    /* ---------- SECCIONES ---------- */
-    section { padding: 5rem 0; }
-    .bg-alt { background: var(--bg-alt); transition: background 0.3s; }
-
-    .section-head {
-      text-align: center;
-      max-width: 600px;
-      margin: 0 auto 3rem;
-    }
-    .section-head h2 { font-size: clamp(1.8rem, 4vw, 2.5rem); margin-bottom: 0.8rem; }
-    .section-head p { color: var(--text-muted); }
-
-    /* ---------- CARDS ---------- */
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.5rem;
-    }
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 2rem;
-      box-shadow: var(--shadow);
-      transition: transform 0.3s, box-shadow 0.3s, background 0.3s, border-color 0.3s;
-    }
-    .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 12px 30px rgba(79, 70, 229, 0.15);
-    }
-    .card-icon { font-size: 2rem; margin-bottom: 1rem; }
-    .card h3 { margin-bottom: 0.6rem; }
-    .card p { color: var(--text-muted); font-size: 0.95rem; }
-
-    /* ---------- SOBRE NOSOTROS ---------- */
-    .about {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      align-items: center;
-    }
-    .about-text { color: var(--text-muted); margin-bottom: 1rem; }
-    .about .btn { margin-top: 1rem; }
-
-    .stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-    }
-    .stat {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      text-align: center;
-      box-shadow: var(--shadow);
-      transition: background 0.3s, border-color 0.3s;
-    }
-    .stat strong { display: block; font-size: 2rem; color: var(--accent); line-height: 1; }
-    .stat span { font-size: 0.9rem; color: var(--text-muted); }
-
-    /* ---------- FORMULARIO ---------- */
-    .form {
-      max-width: 600px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
-    }
-    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
-    .form-group label { font-weight: 600; font-size: 0.95rem; }
-
-    .form-group input,
-    .form-group textarea {
-      padding: 0.8rem 1rem;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--bg);
-      color: var(--text);
-      font-family: inherit;
-      font-size: 1rem;
-      transition: border-color 0.2s, background 0.3s;
-    }
-    .form-group input:focus,
-    .form-group textarea:focus {
-      outline: none;
-      border-color: var(--accent);
-    }
-    .form-group textarea { resize: vertical; min-height: 130px; }
-
-    .error { color: #e11d48; font-size: 0.85rem; min-height: 1.2em; }
-    .form-status { text-align: center; font-weight: 600; color: var(--accent); min-height: 1.5em; }
-
-    /* ---------- FOOTER ---------- */
-    .footer {
-      border-top: 1px solid var(--border);
-      padding: 2rem 0;
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      transition: border-color 0.3s;
-    }
-
-    /* ---------- ANIMACIÓN REVEAL ---------- */
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-
-    /* ---------- RESPONSIVE ---------- */
-    @media (max-width: 768px) {
-      .nav-toggle { display: flex; }
-      .nav-menu {
-        position: absolute;
-        top: 70px;
-        left: 0;
-        right: 0;
-        flex-direction: column;
-        background: var(--bg);
-        border-bottom: 1px solid var(--border);
-        padding: 1.5rem 0;
-        gap: 1.2rem;
-        transform: translateY(-150%);
-        transition: transform 0.3s ease;
-        z-index: 99;
-      }
-      .nav-menu.open { transform: translateY(0); }
-      .about { grid-template-columns: 1fr; }
-      .stats { grid-template-columns: 1fr 1fr; }
-      .hero { padding: 4rem 0; }
-    }
-
-    @media (max-width: 480px) {
-      .stats { grid-template-columns: 1fr; }
-      .hero-actions { flex-direction: column; align-items: center; }
-    }
-  </style>
+  @media (max-width:520px){
+    .quiz{padding:22px 18px}
+    header{padding:50px 16px 35px}
+  }
+</style>
 </head>
 <body>
 
-  <!-- ==================== HTML ==================== -->
+<header>
+  <span class="etiqueta">Trabajos Prácticos 1 al 17</span>
+  <h1>Lógica Matemática</h1>
+  <p>Resumen de todos los temas de la materia y un juego interactivo de preguntas para poner a prueba lo que aprendiste.</p>
+</header>
 
-  <!-- HEADER -->
-  <header class="header" id="header">
-    <nav class="nav container" aria-label="Navegación principal">
-      <a href="#inicio" class="logo">Mi<span>Marca</span></a>
+<nav>
+  <a href="#temas">📚 Temas</a>
+  <a href="#juego">🎮 Juego de preguntas</a>
+</nav>
 
-      <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-menu">
-        <span></span><span></span><span></span>
-      </button>
+<main>
+  <!-- ====== TEMAS ====== -->
+  <section id="temas" class="seccion">
+    <h2>📚 Resumen de los temas</h2>
+    <p class="subtitulo">Recorrido completo desde los sistemas de numeración hasta el proyecto integrador de matrices.</p>
+    <div id="lista-temas" class="grid"></div>
+  </section>
 
-      <ul class="nav-menu" id="nav-menu">
-        <li><a href="#inicio" class="nav-link">Inicio</a></li>
-        <li><a href="#servicios" class="nav-link">Servicios</a></li>
-        <li><a href="#sobre" class="nav-link">Sobre nosotros</a></li>
-        <li><a href="#contacto" class="nav-link">Contacto</a></li>
-        <li>
-          <button class="theme-toggle" aria-label="Cambiar tema">🌙</button>
-        </li>
-      </ul>
-    </nav>
-  </header>
+  <!-- ====== JUEGO ====== -->
+  <section id="juego" class="seccion">
+    <h2>🎮 Juego de preguntas</h2>
+    <p class="subtitulo">16 preguntas, una por cada trabajo práctico. ¡Demostrá cuánto sabés!</p>
 
-  <main>
-    <!-- HERO -->
-    <section id="inicio" class="hero">
-      <div class="container">
-        <h1>Creamos sitios web que <span>impulsan tu negocio</span></h1>
-        <p>Diseño moderno, código limpio y velocidad de carga excepcional. Todo lo que necesitas para destacar en internet.</p>
-        <div class="hero-actions">
-          <a href="#contacto" class="btn btn-primary">Empezar ahora</a>
-          <a href="#servicios" class="btn btn-outline">Ver servicios</a>
-        </div>
+    <div class="quiz">
+      <!-- Pantalla de inicio -->
+      <div id="quiz-inicio" class="quiz-panel centrado">
+        <h3 style="font-size:1.3rem;margin-bottom:6px">¿Estás listo?</h3>
+        <p>Se te mostrarán 16 preguntas con 4 opciones cada una. Al final vas a ver tu puntaje y la explicación de cada respuesta.</p>
+        <button id="btn-empezar" class="btn">Empezar a jugar 🚀</button>
       </div>
-    </section>
 
-    <!-- SERVICIOS -->
-    <section id="servicios" class="bg-alt">
-      <div class="container">
-        <div class="section-head reveal">
-          <h2>Nuestros servicios</h2>
-          <p>Soluciones completas para llevar tu presencia digital al siguiente nivel.</p>
+      <!-- Pantalla de juego -->
+      <div id="quiz-juego" class="quiz-panel oculto">
+        <div class="quiz-top">
+          <span id="quiz-progreso-texto">Pregunta 1 de 16</span>
+          <span id="quiz-puntaje">Puntaje: 0</span>
         </div>
-
-        <div class="cards">
-          <article class="card reveal">
-            <div class="card-icon" aria-hidden="true">🎨</div>
-            <h3>Diseño web</h3>
-            <p>Interfaces atractivas y funcionales, pensadas para convertir visitantes en clientes.</p>
-          </article>
-
-          <article class="card reveal">
-            <div class="card-icon" aria-hidden="true">⚡</div>
-            <h3>Desarrollo rápido</h3>
-            <p>Sitios optimizados que cargan en menos de un segundo y funcionan en cualquier dispositivo.</p>
-          </article>
-
-          <article class="card reveal">
-            <div class="card-icon" aria-hidden="true">📈</div>
-            <h3>Posicionamiento SEO</h3>
-            <p>Estructura y contenido optimizados para que te encuentren en los buscadores.</p>
-          </article>
-        </div>
+        <div class="barra"><div id="barra-fill"></div></div>
+        <h3 id="quiz-pregunta"></h3>
+        <div id="quiz-opciones" class="opciones"></div>
+        <div id="quiz-feedback" class="feedback oculto"></div>
+        <button id="btn-siguiente" class="btn oculto">Siguiente →</button>
       </div>
-    </section>
 
-    <!-- SOBRE NOSOTROS -->
-    <section id="sobre">
-      <div class="container about">
-        <div class="reveal">
-          <h2>Sobre nosotros</h2>
-          <p class="about-text">Somos un equipo pequeño y apasionado por el detalle. Llevamos más de 8 años creando experiencias digitales para empresas de todos los tamaños.</p>
-          <p class="about-text">Trabajamos de forma cercana, con comunicación clara y entregas puntuales. Sin intermediarios, sin sorpresas.</p>
-          <a href="#contacto" class="btn btn-primary">Hablemos de tu proyecto</a>
-        </div>
-
-        <div class="stats reveal">
-          <div class="stat">
-            <strong>120+</strong>
-            <span>Proyectos entregados</span>
-          </div>
-          <div class="stat">
-            <strong>98%</strong>
-            <span>Clientes satisfechos</span>
-          </div>
-          <div class="stat">
-            <strong>8</strong>
-            <span>Años de experiencia</span>
-          </div>
-          <div class="stat">
-            <strong>24h</strong>
-            <span>Tiempo de respuesta</span>
-          </div>
-        </div>
+      <!-- Pantalla final -->
+      <div id="quiz-final" class="quiz-panel centrado oculto">
+        <div id="resultado"></div>
+        <button id="btn-reiniciar" class="btn">Jugar de nuevo 🔁</button>
       </div>
-    </section>
-
-    <!-- CONTACTO -->
-    <section id="contacto" class="bg-alt">
-      <div class="container">
-        <div class="section-head reveal">
-          <h2>¿Hablamos?</h2>
-          <p>Cuéntanos qué necesitas y te responderemos en menos de 24 horas.</p>
-        </div>
-
-        <form class="form reveal" id="contact-form" novalidate>
-          <div class="form-group">
-            <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" autocomplete="name">
-            <span class="error" id="nombre-error" aria-live="polite"></span>
-          </div>
-
-          <div class="form-group">
-            <label for="email">Correo electrónico</label>
-            <input type="email" id="email" name="email" placeholder="tu@correo.com" autocomplete="email">
-            <span class="error" id="email-error" aria-live="polite"></span>
-          </div>
-
-          <div class="form-group">
-            <label for="mensaje">Mensaje</label>
-            <textarea id="mensaje" name="mensaje" placeholder="Cuéntanos sobre tu proyecto..."></textarea>
-            <span class="error" id="mensaje-error" aria-live="polite"></span>
-          </div>
-
-          <button type="submit" class="btn btn-primary">Enviar mensaje</button>
-          <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
-        </form>
-      </div>
-    </section>
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="container">
-      <p>&copy; <span id="year"></span> MiMarca. Todos los derechos reservados.</p>
     </div>
-  </footer>
+  </section>
+</main>
 
-  <!-- ==================== JAVASCRIPT ==================== -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      /* ---------- AÑO EN EL FOOTER ---------- */
-      document.getElementById('year').textContent = new Date().getFullYear();
+<footer>
+  Hecho para estudiar Lógica Matemática · Resumen + Quiz interactivo
+</footer>
 
-      /* ---------- MENÚ MÓVIL ---------- */
-      const navToggle = document.querySelector('.nav-toggle');
-      const navMenu = document.getElementById('nav-menu');
+<script>
+/* =========================================================
+   1) DATOS DE LOS TEMAS
+   ========================================================= */
+const temas = [
+  {
+    n: 1, icono: "🔢",
+    titulo: "Sistemas de Numeración y Conversión de Datos",
+    resumen: "Un sistema de numeración es un conjunto de símbolos y reglas para representar cantidades. En informática se usan el decimal (base 10), binario (base 2), octal (base 8) y hexadecimal (base 16).",
+    puntos: [
+      "Binario: solo usa 0 y 1; es el lenguaje nativo de la computadora.",
+      "Decimal → otra base: divisiones sucesivas por la base, leyendo los restos de abajo hacia arriba.",
+      "Otra base → decimal: cada dígito por la base elevada a su posición.",
+      "Hexadecimal: 16 símbolos (0–9 y A–F); 1 dígito hex = 4 bits."
+    ]
+  },
+  {
+    n: 2, icono: "➕",
+    titulo: "Aritmética Lógica (Suma y Multiplicación)",
+    resumen: "La aritmética binaria aplica las mismas reglas que la decimal, pero con solo dos dígitos. Es la base de las operaciones que realiza el procesador.",
+    puntos: [
+      "0+0=0 · 0+1=1 · 1+0=1 · 1+1=10 (0 con acarreo 1).",
+      "1+1+1 = 11 (1 con acarreo 1).",
+      "Multiplicación: se multiplica por 0 o 1 y se suman los productos parciales desplazados.",
+      "El acarreo (carry) se propaga a la columna siguiente."
+    ]
+  },
+  {
+    n: 3, icono: "💾",
+    titulo: "Unidades de Medida de la Información",
+    resumen: "La información digital se mide en bits y bytes; cada unidad superior agrupa 1024 (2¹⁰) unidades de la anterior.",
+    puntos: [
+      "1 bit = unidad mínima (0 o 1). 1 byte = 8 bits.",
+      "1 KB = 1024 B · 1 MB = 1024 KB · 1 GB = 1024 MB · 1 TB = 1024 GB.",
+      "Para pasar a una unidad mayor se divide; a una menor se multiplica.",
+      "Ojo: algunos fabricantes usan base 1000, no 1024."
+    ]
+  },
+  {
+    n: 4, icono: "🖼️",
+    titulo: "Representación de la Información",
+    resumen: "Todo lo que guarda una computadora son ceros y unos: números, texto, imágenes, sonido y video se codifican con distintos estándares.",
+    puntos: [
+      "Texto: ASCII y Unicode/UTF-8 para caracteres de todo el mundo.",
+      "Imágenes: mapas de bits (píxeles) o vectores; cada píxel guarda color (RGB).",
+      "Sonido: muestreo y cuantización de la onda.",
+      "Representar = traducir un dato del mundo real a un código binario."
+    ]
+  },
+  {
+    n: 5, icono: "🧠",
+    titulo: "Desarrollo Teórico — Lógica Proposicional",
+    resumen: "Estudia las proposiciones (enunciados que pueden ser Verdaderos o Falsos) y cómo se combinan mediante conectivos lógicos.",
+    puntos: [
+      "Conectivos: ¬ (negación), ∧ (Y), ∨ (O), → (condicional), ↔ (bicondicional).",
+      "La tabla de verdad muestra las 2ⁿ combinaciones posibles.",
+      "Tautología: siempre V. Contradicción: siempre F. Contingencia: depende.",
+      "Jerarquía: ¬ primero, luego ∧, después ∨, y por último → y ↔."
+    ]
+  },
+  {
+    n: 7, icono: "🃏",
+    titulo: "Técnica de Estudio (Flashcards) — Lógica Proposicional II y Conjuntos",
+    resumen: "Técnica de estudio con tarjetas de pregunta/respuesta para repasar activamente la lógica proposicional y la teoría de conjuntos.",
+    puntos: [
+      "Flashcard: pregunta al frente, respuesta atrás; se repasa en intervalos (repaso espaciado).",
+      "Leyes lógicas: identidad, idempotencia, conmutativa, asociativa, distributiva y absorción.",
+      "Conjuntos: unión (∪), intersección (∩), diferencia (−) y complemento (Aᶜ).",
+      "El repaso activo fija mejor los conceptos que releer pasivamente."
+    ]
+  },
+  {
+    n: 8, icono: "🗺️",
+    titulo: "Ambientación y Repaso — “Hoja de Ruta”",
+    resumen: "Organización del recorrido de la materia: qué temas vienen, con qué recursos y en qué tiempos, para llegar ordenado a cada clase.",
+    puntos: [
+      "Hoja de ruta = planificación con objetivos, contenidos y fechas.",
+      "Ambientación: conocer la modalidad, los materiales y las herramientas.",
+      "Definir metas semanales y momentos de repaso.",
+      "Un buen plan reduce la ansiedad y mejora la constancia."
+    ]
+  },
+  {
+    n: 9, icono: "🧩",
+    titulo: "Teoría de Conjuntos — Leyes de De Morgan en la Vida Real",
+    resumen: "Las Leyes de De Morgan relacionan la negación con la unión y la intersección de conjuntos.",
+    puntos: [
+      "(A ∪ B)ᶜ = Aᶜ ∩ Bᶜ",
+      "(A ∩ B)ᶜ = Aᶜ ∪ Bᶜ",
+      "En lógica: ¬(p ∨ q) ≡ ¬p ∧ ¬q  y  ¬(p ∧ q) ≡ ¬p ∨ ¬q",
+      "Sirven para simplificar expresiones y para negar condiciones en programación."
+    ]
+  },
+  {
+    n: 10, icono: "🎲",
+    titulo: "De Morgan en la Vida Real, Series, Juegos y Programación",
+    resumen: "Aplicación práctica de las leyes de De Morgan a situaciones cotidianas, series lógicas, juegos y código.",
+    puntos: [
+      "Ejemplo real: “no es cierto que llueva y haga frío” = “no llueve o no hace frío”.",
+      "Series y juegos: descubrir patrones y reglas de pertenencia.",
+      "En código: !(a && b) equivale a !a || !b.",
+      "Negar bien una condición evita errores lógicos."
+    ]
+  },
+  {
+    n: 11, icono: "🧮",
+    titulo: "De la Lógica al Código — Filtrado Dinámico con Vectores",
+    resumen: "Un vector (array) es una colección ordenada de datos. Con condiciones lógicas se puede filtrar dinámicamente su contenido.",
+    puntos: [
+      "Vector: elementos indexados desde 0.",
+      "Filtrar = quedarse solo con los elementos que cumplen una condición.",
+      "Las condiciones se combinan con && (AND), || (OR) y ! (NOT).",
+      "Ejemplos: alumnos aprobados, productos por precio, contactos por letra."
+    ]
+  },
+  {
+    n: 12, icono: "🛡️",
+    titulo: "Matrices y Espacio 2D — Digitalizando el Escudo Escolar",
+    resumen: "Una matriz es una estructura de datos bidimensional organizada en filas y columnas; sirve para representar imágenes y espacios 2D.",
+    puntos: [
+      "Se accede con dos índices: matriz[fila][columna].",
+      "Una imagen digital es una matriz donde cada celda es un píxel.",
+      "Se puede dibujar un escudo o logo asignando valores a cada celda.",
+      "Recorrer una matriz requiere dos bucles anidados."
+    ]
+  },
+  {
+    n: 13, icono: "🎨",
+    titulo: "Pixel Art y Matrices Bidimensionales — Del Dibujo a la Transformación Numérica",
+    resumen: "El pixel art es una imagen formada por cuadros de color; se digitaliza como una matriz de números donde cada número representa un color de la paleta.",
+    puntos: [
+      "Paleta: tabla que asocia cada número con un color.",
+      "La matriz guarda índices de la paleta, no colores directamente.",
+      "Transformaciones: rotar, espejar o escalar son operaciones sobre la matriz.",
+      "Pensar la imagen como datos: del dibujo a la transformación numérica."
+    ]
+  },
+  {
+    n: 14, icono: "🐍",
+    titulo: "De la Matriz al Código — Carga y Verificación de Pixel Art en Python",
+    resumen: "Implementación en Python de la carga y verificación de un pixel art usando listas de listas.",
+    puntos: [
+      "En Python una matriz es una lista de listas: [[1,2],[3,4]].",
+      "Se recorre con: for fila in matriz: for valor in fila:",
+      "Verificar: que todas las filas tengan el mismo largo y que los valores existan en la paleta.",
+      "Separar datos (matriz), configuración (paleta) y lógica (funciones)."
+    ]
+  },
+  {
+    n: 15, icono: "🐙",
+    titulo: "Creación de Cuenta en GitHub",
+    resumen: "GitHub es una plataforma para alojar y versionar proyectos con Git; permite trabajar en equipo y publicar código.",
+    puntos: [
+      "Pasos: registrarse, verificar el email y elegir nombre de usuario.",
+      "Repositorio = proyecto con su historial de cambios.",
+      "Conceptos clave: commit, branch, push, pull y README.",
+      "El README explica de qué trata el proyecto y cómo usarlo."
+    ]
+  },
+  {
+    n: 16, icono: "🌉",
+    titulo: "El Puente Lógico — De los Conjuntos al Producto Cartesiano y las Funciones",
+    resumen: "El producto cartesiano A × B genera todos los pares ordenados (a, b). Una función es una relación que asigna a cada elemento del dominio uno y solo un elemento del codominio.",
+    puntos: [
+      "A × B = { (a,b) | a ∈ A y b ∈ B } y su cardinal es |A| · |B|.",
+      "Relación: cualquier subconjunto de A × B.",
+      "Función: cada entrada tiene una única salida (imagen).",
+      "Conceptos clave: dominio, codominio e imagen."
+    ]
+  },
+  {
+    n: 17, icono: "🔬",
+    titulo: "Mi Pixel Art en el Laboratorio de Matrices",
+    resumen: "Proyecto integrador: diseñar un pixel art propio, modelarlo como matriz, cargarlo en código y verificar su correctitud.",
+    puntos: [
+      "Integra todo: lógica, conjuntos, matrices y programación.",
+      "Etapas: diseño → matriz → paleta → código → verificación.",
+      "Documentar el proceso y publicarlo en GitHub.",
+      "Cierre del recorrido: de la idea al dato y del dato al programa."
+    ]
+  }
+];
 
-      navToggle.addEventListener('click', () => {
-        const isOpen = navMenu.classList.toggle('open');
-        navToggle.classList.toggle('active');
-        navToggle.setAttribute('aria-expanded', isOpen);
-      });
+/* Render de las tarjetas */
+const contenedorTemas = document.getElementById("lista-temas");
+temas.forEach(t => {
+  const card = document.createElement("article");
+  card.className = "card";
+  card.innerHTML = `
+    <div class="card-head">
+      <span class="badge">TP ${t.n}</span>
+      <span class="icono">${t.icono}</span>
+    </div>
+    <h3>${t.titulo}</h3>
+    <p>${t.resumen}</p>
+    <ul>${t.puntos.map(p => `<li>${p}</li>`).join("")}</ul>
+  `;
+  contenedorTemas.appendChild(card);
+});
 
-      document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', () => {
-          navMenu.classList.remove('open');
-          navToggle.classList.remove('active');
-          navToggle.setAttribute('aria-expanded', 'false');
-        });
-      });
+/* =========================================================
+   2) BANCO DE PREGUNTAS DEL JUEGO
+   ========================================================= */
+const preguntas = [
+  {
+    pregunta: "¿A qué número decimal equivale el binario 1011₂?",
+    opciones: ["9", "11", "13", "15"],
+    correcta: 1,
+    explicacion: "1·8 + 0·4 + 1·2 + 1·1 = 8 + 2 + 1 = 11."
+  },
+  {
+    pregunta: "En aritmética binaria, ¿cuál es el resultado correcto de 1 + 1?",
+    opciones: ["1 con acarreo 0", "10₂ (0 con acarreo 1)", "11₂", "0 sin acarreo"],
+    correcta: 1,
+    explicacion: "1 + 1 = 10₂: se escribe 0 y se lleva un acarreo (carry) de 1 a la columna siguiente."
+  },
+  {
+    pregunta: "¿Cuántos bits hay en un byte?",
+    opciones: ["4", "8", "16", "1024"],
+    correcta: 1,
+    explicacion: "1 byte = 8 bits. El byte es la unidad básica con la que se mide la información."
+  },
+  {
+    pregunta: "¿Qué estándar se utiliza para representar texto con caracteres de todo el mundo?",
+    opciones: ["ASCII", "RGB", "Unicode / UTF-8", "JPEG"],
+    correcta: 2,
+    explicacion: "ASCII solo cubre 128 caracteres; Unicode/UTF-8 permite representar caracteres de todos los idiomas."
+  },
+  {
+    pregunta: "¿Cuándo es verdadera una conjunción (p ∧ q)?",
+    opciones: [
+      "Cuando al menos una de las dos es verdadera",
+      "Cuando ambas proposiciones son verdaderas",
+      "Cuando ambas son falsas",
+      "Siempre es verdadera"
+    ],
+    correcta: 1,
+    explicacion: "La conjunción (AND) solo es verdadera si p y q son verdaderas al mismo tiempo."
+  },
+  {
+    pregunta: "¿Qué es una flashcard?",
+    opciones: [
+      "Una tarjeta con una pregunta al frente y la respuesta atrás, usada para repaso activo",
+      "Un tipo de planilla de cálculo",
+      "Un formato de imagen comprimida",
+      "Un lenguaje de programación"
+    ],
+    correcta: 0,
+    explicacion: "Las flashcards son tarjetas de estudio que favorecen el repaso activo y espaciado."
+  },
+  {
+    pregunta: "¿Para qué sirve una “hoja de ruta” en el estudio?",
+    opciones: [
+      "Para rendir exámenes sin estudiar",
+      "Para planificar contenidos, tiempos y objetivos del cuatrimestre",
+      "Para guardar apuntes en la nube",
+      "Para calcular conversiones binarias"
+    ],
+    correcta: 1,
+    explicacion: "La hoja de ruta organiza el recorrido de la materia: qué se ve, cuándo y con qué recursos."
+  },
+  {
+    pregunta: "¿Cuál de estas es una Ley de De Morgan correcta?",
+    opciones: [
+      "(A ∪ B)ᶜ = Aᶜ ∪ Bᶜ",
+      "(A ∩ B)ᶜ = Aᶜ ∪ Bᶜ",
+      "(A ∩ B)ᶜ = Aᶜ ∩ Bᶜ",
+      "(A ∪ B)ᶜ = A ∪ B"
+    ],
+    correcta: 1,
+    explicacion: "El complemento de la intersección es la unión de los complementos: (A ∩ B)ᶜ = Aᶜ ∪ Bᶜ."
+  },
+  {
+    pregunta: "En programación, ¿a qué equivale la expresión !(a && b)?",
+    opciones: ["!a && !b", "!a || !b", "a || b", "a && b"],
+    correcta: 1,
+    explicacion: "Por De Morgan: ¬(a ∧ b) ≡ ¬a ∨ ¬b, es decir !a || !b."
+  },
+  {
+    pregunta: "¿Qué significa “filtrar” un vector?",
+    opciones: [
+      "Ordenar sus elementos de menor a mayor",
+      "Quedarse solo con los elementos que cumplen una condición",
+      "Eliminar todos sus elementos",
+      "Duplicar su tamaño"
+    ],
+    correcta: 1,
+    explicacion: "Filtrar es construir un nuevo vector con los elementos que satisfacen una condición lógica."
+  },
+  {
+    pregunta: "¿Cómo se accede a un elemento de una matriz bidimensional?",
+    opciones: [
+      "Con un solo índice",
+      "Con dos índices: fila y columna",
+      "Solo por su valor",
+      "No se puede acceder"
+    ],
+    correcta: 1,
+    explicacion: "Se usa matriz[fila][columna], empezando a contar desde 0 en ambos casos."
+  },
+  {
+    pregunta: "En un pixel art digitalizado como matriz, ¿qué guarda cada celda?",
+    opciones: [
+      "El color escrito en texto (ej. 'rojo')",
+      "Un índice que corresponde a un color de la paleta",
+      "El ancho total de la imagen",
+      "La cantidad de píxeles"
+    ],
+    correcta: 1,
+    explicacion: "Cada celda guarda un número que es un índice dentro de la paleta de colores."
+  },
+  {
+    pregunta: "En Python, ¿cómo se representa una matriz?",
+    opciones: [
+      "Con una lista de listas",
+      "Con un string",
+      "Con un diccionario de claves",
+      "Con una tupla de números"
+    ],
+    correcta: 0,
+    explicacion: "Una matriz en Python es una lista cuyos elementos son, a su vez, listas (las filas)."
+  },
+  {
+    pregunta: "¿Qué es un repositorio en GitHub?",
+    opciones: [
+      "Un chat para programadores",
+      "Un proyecto con sus archivos y su historial de cambios",
+      "Un tipo de virus informático",
+      "Una red social de fotos"
+    ],
+    correcta: 1,
+    explicacion: "Un repositorio almacena el proyecto y todo su historial de versiones (commits)."
+  },
+  {
+    pregunta: "Si |A| = 3 y |B| = 4, ¿cuántos pares ordenados tiene A × B?",
+    opciones: ["7", "12", "3", "4"],
+    correcta: 1,
+    explicacion: "El cardinal del producto cartesiano es |A| · |B| = 3 · 4 = 12."
+  },
+  {
+    pregunta: "¿Cuál es el orden lógico del proyecto integrador de pixel art?",
+    opciones: [
+      "Código → diseño → verificación",
+      "Diseño → matriz y paleta → código → verificación",
+      "Verificación → diseño → código",
+      "Matriz → diseño → paleta"
+    ],
+    correcta: 1,
+    explicacion: "Primero se diseña el dibujo, luego se pasa a matriz con su paleta, después al código y por último se verifica."
+  }
+];
 
-      /* ---------- MODO OSCURO / CLARO ---------- */
-      const themeToggle = document.querySelector('.theme-toggle');
-      const html = document.documentElement;
+/* =========================================================
+   3) LÓGICA DEL JUEGO
+   ========================================================= */
+const $ = id => document.getElementById(id);
 
-      const savedTheme = localStorage.getItem('theme') || 'light';
-      html.setAttribute('data-theme', savedTheme);
-      themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+let orden = [];
+let idx = 0;
+let puntaje = 0;
+let respondida = false;
 
-      themeToggle.addEventListener('click', () => {
-        const current = html.getAttribute('data-theme');
-        const next = current === 'dark' ? 'light' : 'dark';
-        html.setAttribute('data-theme', next);
-        localStorage.setItem('theme', next);
-        themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
-      });
+function shuffle(array) {
+  const a = [...array];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
-      /* ---------- SCROLL REVEAL ---------- */
-      const revealElements = document.querySelectorAll('.reveal');
+function iniciarJuego() {
+  orden = shuffle(preguntas);
+  idx = 0;
+  puntaje = 0;
+  $("quiz-inicio").classList.add("oculto");
+  $("quiz-final").classList.add("oculto");
+  $("quiz-juego").classList.remove("oculto");
+  mostrarPregunta();
+}
 
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('visible');
-              observer.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.15 }
-      );
+function mostrarPregunta() {
+  respondida = false;
+  const p = orden[idx];
 
-      revealElements.forEach(el => observer.observe(el));
+  $("quiz-progreso-texto").textContent = `Pregunta ${idx + 1} de ${orden.length}`;
+  $("quiz-puntaje").textContent = `Puntaje: ${puntaje}`;
+  $("barra-fill").style.width = `${(idx / orden.length) * 100}%`;
+  $("quiz-pregunta").textContent = p.pregunta;
 
-      /* ---------- VALIDACIÓN DEL FORMULARIO ---------- */
-      const form = document.getElementById('contact-form');
-      const nombre = document.getElementById('nombre');
-      const email = document.getElementById('email');
-      const mensaje = document.getElementById('mensaje');
+  const cont = $("quiz-opciones");
+  cont.innerHTML = "";
 
-      const errorNombre = document.getElementById('nombre-error');
-      const errorEmail = document.getElementById('email-error');
-      const errorMensaje = document.getElementById('mensaje-error');
-      const formStatus = document.getElementById('form-status');
+  const opcionesMezcladas = shuffle(
+    p.opciones.map((texto, i) => ({ texto, esCorrecta: i === p.correcta }))
+  );
 
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  opcionesMezcladas.forEach(op => {
+    const btn = document.createElement("button");
+    btn.className = "opcion";
+    btn.type = "button";
+    btn.textContent = op.texto;
+    btn.dataset.correcta = op.esCorrecta ? "true" : "false";
+    btn.addEventListener("click", () => responder(btn, op.esCorrecta, p));
+    cont.appendChild(btn);
+  });
 
-      function limpiarErrores() {
-        errorNombre.textContent = '';
-        errorEmail.textContent = '';
-        errorMensaje.textContent = '';
-        formStatus.textContent = '';
-      }
+  const fb = $("quiz-feedback");
+  fb.classList.add("oculto");
+  fb.classList.remove("ok", "no");
+  fb.textContent = "";
 
-      function validar() {
-        let valido = true;
+  const btnSig = $("btn-siguiente");
+  btnSig.classList.add("oculto");
+  btnSig.textContent = idx === orden.length - 1 ? "Ver resultados 🏁" : "Siguiente →";
+}
 
-        if (nombre.value.trim().length < 2) {
-          errorNombre.textContent = 'Escribe tu nombre (mínimo 2 caracteres).';
-          valido = false;
-        }
-        if (!emailRegex.test(email.value.trim())) {
-          errorEmail.textContent = 'Introduce un correo válido.';
-          valido = false;
-        }
-        if (mensaje.value.trim().length < 10) {
-          errorMensaje.textContent = 'El mensaje debe tener al menos 10 caracteres.';
-          valido = false;
-        }
-        return valido;
-      }
+function responder(boton, esCorrecta, pregunta) {
+  if (respondida) return;
+  respondida = true;
 
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        limpiarErrores();
+  const botones = document.querySelectorAll("#quiz-opciones .opcion");
+  botones.forEach(b => {
+    b.disabled = true;
+    if (b.dataset.correcta === "true") b.classList.add("correcta");
+  });
 
-        if (!validar()) return;
+  if (!esCorrecta) boton.classList.add("incorrecta");
+  else puntaje++;
 
-        formStatus.textContent = '¡Mensaje enviado! Te responderemos pronto. 🎉';
-        form.reset();
+  $("quiz-puntaje").textContent = `Puntaje: ${puntaje}`;
 
-        setTimeout(() => {
-          formStatus.textContent = '';
-        }, 5000);
-      });
+  const fb = $("quiz-feedback");
+  fb.classList.remove("oculto");
+  fb.classList.add(esCorrecta ? "ok" : "no");
+  fb.innerHTML = `<strong>${esCorrecta ? "✅ ¡Correcto!" : "❌ No era esa."}</strong><br>${pregunta.explicacion}`;
 
-      [nombre, email, mensaje].forEach(input => {
-        input.addEventListener('input', limpiarErrores);
-      });
-    });
-  </script>
+  $("btn-siguiente").classList.remove("oculto");
+}
+
+function mostrarFinal() {
+  $("quiz-juego").classList.add("oculto");
+  $("quiz-final").classList.remove("oculto");
+
+  const total = orden.length;
+  const pct = Math.round((puntaje / total) * 100);
+
+  let mensaje;
+  if (pct === 100) mensaje = "¡Perfecto! Dominás todos los temas 🏆";
+  else if (pct >= 80) mensaje = "¡Muy bien! Solo te faltan algunos detalles 👏";
+  else if (pct >= 50) mensaje = "Buen trabajo, pero conviene repasar algunos temas 📖";
+  else mensaje = "Toca volver a los resúmenes y practicar de nuevo 💪";
+
+  $("resultado").innerHTML = `
+    <h3 style="font-size:1.3rem;margin-bottom:10px">Resultado final</h3>
+    <div class="puntaje-grande">${puntaje} / ${total}</div>
+    <p style="margin-top:10px;font-size:1.05rem">${mensaje}</p>
+    <p style="color:var(--muted);margin-top:6px">Acertaste el ${pct}% de las preguntas.</p>
+  `;
+}
+
+/* Eventos de los botones */
+$("btn-empezar").addEventListener("click", iniciarJuego);
+$("btn-reiniciar").addEventListener("click", iniciarJuego);
+$("btn-siguiente").addEventListener("click", () => {
+  if (idx < orden.length - 1) {
+    idx++;
+    mostrarPregunta();
+  } else {
+    $("barra-fill").style.width = "100%";
+    mostrarFinal();
+  }
+});
+</script>
 </body>
-  </html>
+</html>
