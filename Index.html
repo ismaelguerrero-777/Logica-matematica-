@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MiMarca — Diseño y desarrollo web</title>
+  <meta name="description" content="Creamos sitios web rápidos, modernos y adaptados a móviles.">
+
+  <!-- ==================== CSS ==================== -->
+  <style>
+    /* ---------- VARIABLES Y RESET ---------- */
+    :root {
+      --bg: #ffffff;
+      --bg-alt: #f7f7fb;
+      --text: #1a1a2e;
+      --text-muted: #555;
+      --accent: #4f46e5;
+      --accent-hover: #4338ca;
+      --border: #e0e0e8;
+      --card-bg: #ffffff;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      --radius: 12px;
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0f0f1a;
+      --bg-alt: #1a1a2e;
+      --text: #e8e8f0;
+      --text-muted: #a0a0b8;
+      --accent: #818cf8;
+      --accent-hover: #a5b4fc;
+      --border: #2a2a40;
+      --card-bg: #1e1e32;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .container { width: min(1100px, 90%); margin: 0 auto; }
+
+    /* ---------- HEADER ---------- */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+    .logo span { color: var(--accent); }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-link:hover, .nav-link.active { color: var(--accent); }
+
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .theme-toggle:hover { border-color: var(--accent); transform: scale(1.05); }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 5px;
+    }
+    .nav-toggle span {
+      width: 25px;
+      height: 3px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .nav-toggle.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .nav-toggle.active span:nth-child(2) { opacity: 0; }
+    .nav-toggle.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+    /* ---------- HERO ---------- */
+    .hero { padding: 6rem 0; text-align: center; }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.2;
+      letter-spacing: -1px;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 2.5rem;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ---------- BOTONES ---------- */
+    .btn {
+      display: inline-block;
+      padding: 0.8rem 1.8rem;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 1rem;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+
+    .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+
+    .btn-outline { background: transparent; color: var(--text); border-color: var(--border); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ---------- SECCIONES ---------- */
+    section { padding: 5rem 0; }
+    .bg-alt { background: var(--bg-alt); transition: background 0.3s; }
+
+    .section-head {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto 3rem;
+    }
+    .section-head h2 { font-size: clamp(1.8rem, 4vw, 2.5rem); margin-bottom: 0.8rem; }
+    .section-head p { color: var(--text-muted); }
+
+    /* ---------- CARDS ---------- */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s, box-shadow 0.3s, background 0.3s, border-color 0.3s;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 30px rgba(79, 70, 229, 0.15);
+    }
+    .card-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .card h3 { margin-bottom: 0.6rem; }
+    .card p { color: var(--text-muted); font-size: 0.95rem; }
+
+    /* ---------- SOBRE NOSOTROS ---------- */
+    .about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+    .about-text { color: var(--text-muted); margin-bottom: 1rem; }
+    .about .btn { margin-top: 1rem; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .stat {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .stat strong { display: block; font-size: 2rem; color: var(--accent); line-height: 1; }
+    .stat span { font-size: 0.9rem; color: var(--text-muted); }
+
+    /* ---------- FORMULARIO ---------- */
+    .form {
+      max-width: 600px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label { font-weight: 600; font-size: 0.95rem; }
+
+    .form-group input,
+    .form-group textarea {
+      padding: 0.8rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 1rem;
+      transition: border-color 0.2s, background 0.3s;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .form-group textarea { resize: vertical; min-height: 130px; }
+
+    .error { color: #e11d48; font-size: 0.85rem; min-height: 1.2em; }
+    .form-status { text-align: center; font-weight: 600; color: var(--accent); min-height: 1.5em; }
+
+    /* ---------- FOOTER ---------- */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      transition: border-color 0.3s;
+    }
+
+    /* ---------- ANIMACIÓN REVEAL ---------- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 768px) {
+      .nav-toggle { display: flex; }
+      .nav-menu {
+        position: absolute;
+        top: 70px;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        background: var(--bg);
+        border-bottom: 1px solid var(--border);
+        padding: 1.5rem 0;
+        gap: 1.2rem;
+        transform: translateY(-150%);
+        transition: transform 0.3s ease;
+        z-index: 99;
+      }
+      .nav-menu.open { transform: translateY(0); }
+      .about { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: 1fr 1fr; }
+      .hero { padding: 4rem 0; }
+    }
+
+    @media (max-width: 480px) {
+      .stats { grid-template-columns: 1fr; }
+      .hero-actions { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== HTML ==================== -->
+
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <nav class="nav container" aria-label="Navegación principal">
+      <a href="#inicio" class="logo">Mi<span>Marca</span></a>
+
+      <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav-menu" id="nav-menu">
+        <li><a href="#inicio" class="nav-link">Inicio</a></li>
+        <li><a href="#servicios" class="nav-link">Servicios</a></li>
+        <li><a href="#sobre" class="nav-link">Sobre nosotros</a></li>
+        <li><a href="#contacto" class="nav-link">Contacto</a></li>
+        <li>
+          <button class="theme-toggle" aria-label="Cambiar tema">🌙</button>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section id="inicio" class="hero">
+      <div class="container">
+        <h1>Creamos sitios web que <span>impulsan tu negocio</span></h1>
+        <p>Diseño moderno, código limpio y velocidad de carga excepcional. Todo lo que necesitas para destacar en internet.</p>
+        <div class="hero-actions">
+          <a href="#contacto" class="btn btn-primary">Empezar ahora</a>
+          <a href="#servicios" class="btn btn-outline">Ver servicios</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICIOS -->
+    <section id="servicios" class="bg-alt">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2>Nuestros servicios</h2>
+          <p>Soluciones completas para llevar tu presencia digital al siguiente nivel.</p>
+        </div>
+
+        <div class="cards">
+          <article class="card reveal">
+            <div class="card-icon" aria-hidden="true">🎨</div>
+            <h3>Diseño web</h3>
+            <p>Interfaces atractivas y funcionales, pensadas para convertir visitantes en clientes.</p>
+          </article>
+
+          <article class="card reveal">
+            <div class="card-icon" aria-hidden="true">⚡</div>
+            <h3>Desarrollo rápido</h3>
+            <p>Sitios optimizados que cargan en menos de un segundo y funcionan en cualquier dispositivo.</p>
+          </article>
+
+          <article class="card reveal">
+            <div class="card-icon" aria-hidden="true">📈</div>
+            <h3>Posicionamiento SEO</h3>
+            <p>Estructura y contenido optimizados para que te encuentren en los buscadores.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOBRE NOSOTROS -->
+    <section id="sobre">
+      <div class="container about">
+        <div class="reveal">
+          <h2>Sobre nosotros</h2>
+          <p class="about-text">Somos un equipo pequeño y apasionado por el detalle. Llevamos más de 8 años creando experiencias digitales para empresas de todos los tamaños.</p>
+          <p class="about-text">Trabajamos de forma cercana, con comunicación clara y entregas puntuales. Sin intermediarios, sin sorpresas.</p>
+          <a href="#contacto" class="btn btn-primary">Hablemos de tu proyecto</a>
+        </div>
+
+        <div class="stats reveal">
+          <div class="stat">
+            <strong>120+</strong>
+            <span>Proyectos entregados</span>
+          </div>
+          <div class="stat">
+            <strong>98%</strong>
+            <span>Clientes satisfechos</span>
+          </div>
+          <div class="stat">
+            <strong>8</strong>
+            <span>Años de experiencia</span>
+          </div>
+          <div class="stat">
+            <strong>24h</strong>
+            <span>Tiempo de respuesta</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACTO -->
+    <section id="contacto" class="bg-alt">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2>¿Hablamos?</h2>
+          <p>Cuéntanos qué necesitas y te responderemos en menos de 24 horas.</p>
+        </div>
+
+        <form class="form reveal" id="contact-form" novalidate>
+          <div class="form-group">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" autocomplete="name">
+            <span class="error" id="nombre-error" aria-live="polite"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Correo electrónico</label>
+            <input type="email" id="email" name="email" placeholder="tu@correo.com" autocomplete="email">
+            <span class="error" id="email-error" aria-live="polite"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="mensaje">Mensaje</label>
+            <textarea id="mensaje" name="mensaje" placeholder="Cuéntanos sobre tu proyecto..."></textarea>
+            <span class="error" id="mensaje-error" aria-live="polite"></span>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Enviar mensaje</button>
+          <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; <span id="year"></span> MiMarca. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      /* ---------- AÑO EN EL FOOTER ---------- */
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      /* ---------- MENÚ MÓVIL ---------- */
+      const navToggle = document.querySelector('.nav-toggle');
+      const navMenu = document.getElementById('nav-menu');
+
+      navToggle.addEventListener('click', () => {
+        const isOpen = navMenu.classList.toggle('open');
+        navToggle.classList.toggle('active');
+        navToggle.setAttribute('aria-expanded', isOpen);
+      });
+
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+          navMenu.classList.remove('open');
+          navToggle.classList.remove('active');
+          navToggle.setAttribute('aria-expanded', 'false');
+        });
+      });
+
+      /* ---------- MODO OSCURO / CLARO ---------- */
+      const themeToggle = document.querySelector('.theme-toggle');
+      const html = document.documentElement;
+
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      html.setAttribute('data-theme', savedTheme);
+      themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+      themeToggle.addEventListener('click', () => {
+        const current = html.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
+      });
+
+      /* ---------- SCROLL REVEAL ---------- */
+      const revealElements = document.querySelectorAll('.reveal');
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.15 }
+      );
+
+      revealElements.forEach(el => observer.observe(el));
+
+      /* ---------- VALIDACIÓN DEL FORMULARIO ---------- */
+      const form = document.getElementById('contact-form');
+      const nombre = document.getElementById('nombre');
+      const email = document.getElementById('email');
+      const mensaje = document.getElementById('mensaje');
+
+      const errorNombre = document.getElementById('nombre-error');
+      const errorEmail = document.getElementById('email-error');
+      const errorMensaje = document.getElementById('mensaje-error');
+      const formStatus = document.getElementById('form-status');
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      function limpiarErrores() {
+        errorNombre.textContent = '';
+        errorEmail.textContent = '';
+        errorMensaje.textContent = '';
+        formStatus.textContent = '';
+      }
+
+      function validar() {
+        let valido = true;
+
+        if (nombre.value.trim().length < 2) {
+          errorNombre.textContent = 'Escribe tu nombre (mínimo 2 caracteres).';
+          valido = false;
+        }
+        if (!emailRegex.test(email.value.trim())) {
+          errorEmail.textContent = 'Introduce un correo válido.';
+          valido = false;
+        }
+        if (mensaje.value.trim().length < 10) {
+          errorMensaje.textContent = 'El mensaje debe tener al menos 10 caracteres.';
+          valido = false;
+        }
+        return valido;
+      }
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        limpiarErrores();
+
+        if (!validar()) return;
+
+        formStatus.textContent = '¡Mensaje enviado! Te responderemos pronto. 🎉';
+        form.reset();
+
+        setTimeout(() => {
+          formStatus.textContent = '';
+        }, 5000);
+      });
+
+      [nombre, email, mensaje].forEach(input => {
+        input.addEventListener('input', limpiarErrores);
+      });
+    });
+  </script>
+</body>
+  </html>
